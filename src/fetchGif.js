@@ -1,16 +1,23 @@
-const url =
-  "https://api.giphy.com/v1/gifs/translate?api_key=qLKddPhNlo5HIyU9n9QfDx3skxU5EjBx&s=dogs";
+import { config } from "./config";
 
-export async function fetchGif() {
+const url = `https://api.giphy.com/v1/gifs/translate?api_key=${config.API_KEY}&s=`;
+
+export async function fetchGif(searchParam) {
   try {
-    const gif = await fetch(url, { mode: "cors" })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (response) {
-        return response.data.images.original.url;
-      });
-    console.log(gif);
+    const response = await fetch(url + searchParam, { mode: "cors" });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.data.length === 0) {
+      return "";
+    }
+
+    const gif = data.data.images.original.url;
+
     return gif;
   } catch (error) {
     console.error("Error: ", error);

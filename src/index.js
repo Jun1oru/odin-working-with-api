@@ -1,7 +1,15 @@
 import { fetchGif } from "./fetchGif";
+import { createButton, createSearchBox } from "./domManager";
 
 const body = document.querySelector("body");
 const img = document.createElement("img");
-img.src = fetchGif();
+img.alt = "NO GIF";
 
-body.appendChild(img);
+async function setImg() {
+  img.src = await fetchGif("tomandjerry");
+  body.appendChild(img);
+  body.appendChild(createButton());
+  body.appendChild(createSearchBox());
+}
+
+setImg();
